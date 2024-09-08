@@ -5,7 +5,8 @@ import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { SplashScreen } from 'src/components/loading-screen';
 
-import { useAuthContext } from '../hooks';
+// import { useAuthContext } from '../hooks';
+import { useAccount } from 'wagmi';
 
 // ----------------------------------------------------------------------
 
@@ -14,9 +15,10 @@ type Props = {
 };
 
 export default function GuestGuard({ children }: Props) {
-  const { loading } = useAuthContext();
-
-  return <>{loading ? <SplashScreen /> : <Container>{children}</Container>}</>;
+  // const { loading } = useAuthContext();
+  // return <>{loading ? <SplashScreen /> :
+  return <Container>{children}</Container>;
+  // }</>;
 }
 
 // ----------------------------------------------------------------------
@@ -24,17 +26,17 @@ export default function GuestGuard({ children }: Props) {
 function Container({ children }: Props) {
   const router = useRouter();
 
+  const { address, isConnecting } = useAccount();
+
   const searchParams = useSearchParams();
 
-  const returnTo = searchParams.get('returnTo') || paths.dashboard.root;
-
-  const { authenticated } = useAuthContext();
+  const returnTo = searchParams.get('returnTo') || paths.projects.root;
 
   const check = useCallback(() => {
-    if (authenticated) {
+    if (address) {
       router.replace(returnTo);
     }
-  }, [authenticated, returnTo, router]);
+  }, [isConnecting, returnTo, router]);
 
   useEffect(() => {
     check();

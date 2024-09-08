@@ -27,6 +27,7 @@ export function fTimestamp(date: InputValue) {
 }
 
 export function fToNow(date: InputValue) {
+  console.log('date', date);
   return date
     ? formatDistanceToNow(new Date(date), {
         addSuffix: true,

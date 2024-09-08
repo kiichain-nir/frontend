@@ -1,13 +1,16 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { alpha, useTheme } from '@mui/material/styles';
+
+import { paths } from 'src/routes/paths';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { bgGradient } from 'src/theme/css';
+// import { useAuthContext } from 'src/auth/hooks';
 
 import Logo from 'src/components/logo';
+import Header from '../main/header';
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +21,8 @@ type Props = {
 };
 
 export default function AuthClassicLayout({ children, image, title }: Props) {
+  // const { method } = useAuthContext();
+
   const theme = useTheme();
 
   const mdUp = useResponsive('up', 'md');
@@ -51,8 +56,8 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
     <Stack
       flexGrow={1}
       spacing={10}
-      alignItems="center"
-      justifyContent="center"
+      alignItems="start"
+      justifyContent="end"
       sx={{
         ...bgGradient({
           color: alpha(
@@ -63,20 +68,13 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
         }),
       }}
     >
-      <Typography variant="h3" sx={{ maxWidth: 480, textAlign: 'center' }}>
-        {title || 'Hi, Welcome back'}
-      </Typography>
-
       <Box
         component="img"
         alt="auth"
-        src={image || '/assets/illustrations/illustration_dashboard.png'}
+        src="/assets/background/ConnectWallet.jpeg"
         sx={{
-          maxWidth: {
-            xs: 480,
-            lg: 560,
-            xl: 720,
-          },
+          width: '100%',
+          mt: 10,
         }}
       />
     </Stack>
@@ -90,8 +88,7 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
         minHeight: '100vh',
       }}
     >
-      {renderLogo}
-
+      <Header />
       {mdUp && renderSection}
 
       {renderContent}

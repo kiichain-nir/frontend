@@ -1,4 +1,8 @@
+import { _id, _postTitles } from 'src/_mock/assets';
+
 // ----------------------------------------------------------------------
+
+const MOCK_ID = _id[1];
 
 const ROOTS = {
   AUTH: '/auth',
@@ -8,24 +12,35 @@ const ROOTS = {
 // ----------------------------------------------------------------------
 
 export const paths = {
-  minimalUI: 'https://mui.com/store/items/nirbhik-dashboard/',
   // AUTH
   auth: {
-    jwt: {
-      login: `${ROOTS.AUTH}/jwt/login`,
-      register: `${ROOTS.AUTH}/jwt/register`,
-    },
+    login: `${ROOTS.AUTH}/login`,
   },
-  // DASHBOARD
-  dashboard: {
-    root: ROOTS.DASHBOARD,
-    one: `${ROOTS.DASHBOARD}/one`,
-    two: `${ROOTS.DASHBOARD}/two`,
-    three: `${ROOTS.DASHBOARD}/three`,
-    group: {
-      root: `${ROOTS.DASHBOARD}/group`,
-      five: `${ROOTS.DASHBOARD}/group/five`,
-      six: `${ROOTS.DASHBOARD}/group/six`,
+
+  projects: {
+    root: `/projects/`,
+    new: `/projects/new`,
+    details: (id: string) => `/projects/${id}`,
+    edit: (id: string) => `/projects/${id}/edit`,
+    demo: {
+      details: `/projects/${MOCK_ID}`,
+      edit: `/projects/${MOCK_ID}/edit`,
+    },
+    beneficiary: {
+      list: (projectUUID: string) => `/projects/${projectUUID}/beneficiary`,
+      add: (projectUUID: string) => `/projects/${projectUUID}/beneficiary/add`,
+      view: (projectUUID: string, beneficiaryUUID: string) =>
+        `/projects/${projectUUID}/beneficiary/${beneficiaryUUID}`,
+    },
+    vendor: {
+      list: (projectUUID: string) => `/projects/${projectUUID}/community-managers`,
+      add: (projectUUID: string) => `/projects/${projectUUID}/community-managers/add`,
+      view: (projectUUID: string, communitManagersUUID: string) =>
+        `/projects/${projectUUID}/community-managers/${communitManagersUUID}`,
+    },
+
+    transaction: {
+      root: (projectUUID: string) => `/projects/${projectUUID}/transaction`,
     },
   },
 };

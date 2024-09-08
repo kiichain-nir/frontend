@@ -1,6 +1,6 @@
 {
-  "name": "Nirbhik UI",
-  "short_name": "Nirbhik UI",
+  "name": "Nirbhik",
+  "short_name": "Nirbhik",
   "display": "standalone",
   "start_url": "/",
   "theme_color": "#000000",

@@ -1,3 +1,4 @@
+import { useAccount } from 'wagmi';
 import { useState, useEffect, useCallback } from 'react';
 
 import { paths } from 'src/routes/paths';
@@ -5,12 +6,12 @@ import { useRouter } from 'src/routes/hooks';
 
 import { SplashScreen } from 'src/components/loading-screen';
 
-import { useAuthContext } from '../hooks';
+// import { useAuthContext } from '../hooks';
 
 // ----------------------------------------------------------------------
 
 const loginPaths: Record<string, string> = {
-  jwt: paths.auth.jwt.login,
+  login: paths.auth.login,
 };
 
 // ----------------------------------------------------------------------
@@ -20,9 +21,10 @@ type Props = {
 };
 
 export default function AuthGuard({ children }: Props) {
-  const { loading } = useAuthContext();
-
-  return <>{loading ? <SplashScreen /> : <Container>{children}</Container>}</>;
+  // const { loading } = useAuthContext();
+  // return <>{loading ? <SplashScreen /> :
+  return <Container>{children}</Container>;
+  // }</>;
 }
 
 // ----------------------------------------------------------------------
@@ -30,17 +32,19 @@ export default function AuthGuard({ children }: Props) {
 function Container({ children }: Props) {
   const router = useRouter();
 
-  const { authenticated, method } = useAuthContext();
+  // const { method } = useAuthContext();
 
   const [checked, setChecked] = useState(false);
 
+  const { address, isConnecting } = useAccount();
+
   const check = useCallback(() => {
-    if (!authenticated) {
+    if (!address) {
       const searchParams = new URLSearchParams({
         returnTo: window.location.pathname,
       }).toString();
 
-      const loginPath = loginPaths[method];
+      const loginPath = loginPaths.login;
 
       const href = `${loginPath}?${searchParams}`;
 
@@ -48,7 +52,7 @@ function Container({ children }: Props) {
     } else {
       setChecked(true);
     }
-  }, [authenticated, method, router]);
+  }, [isConnecting, router]);
 
   useEffect(() => {
     check();

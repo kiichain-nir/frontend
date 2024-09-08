@@ -24,7 +24,7 @@ export default function NavUpgrade() {
       }}
     >
       <Stack alignItems="center">
-        <Box sx={{ position: 'relative' }}>
+        {/* <Box sx={{ position: 'relative' }}>
           <Avatar src={user?.photoURL} alt={user?.displayName} sx={{ width: 48, height: 48 }}>
             {user?.displayName?.charAt(0).toUpperCase()}
           </Avatar>
@@ -43,9 +43,9 @@ export default function NavUpgrade() {
           >
             Free
           </Label>
-        </Box>
+        </Box> */}
 
-        <Stack spacing={0.5} sx={{ mb: 2, mt: 1.5, width: 1 }}>
+        {/* <Stack spacing={0.5} sx={{ mb: 2, mt: 1.5, width: 1 }}>
           <Typography variant="subtitle2" noWrap>
             {user?.displayName}
           </Typography>
@@ -53,10 +53,10 @@ export default function NavUpgrade() {
           <Typography variant="body2" noWrap sx={{ color: 'text.disabled' }}>
             {user?.email}
           </Typography>
-        </Stack>
+        </Stack> */}
 
-        <Button variant="contained" href={paths.minimalUI} target="_blank" rel="noopener">
-          Upgrade to Pro
+        <Button fullWidth variant="outlined" href={paths.projects.root} rel="noopener">
+          Exit
         </Button>
       </Stack>
     </Stack>
