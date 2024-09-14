@@ -11,46 +11,21 @@ import {
 
 export const projectAbi = [
   {
-    type: 'function',
-    inputs: [
-      { name: 'tokenAddress', internalType: 'address', type: 'address' },
-      { name: 'walletAddress', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint64', type: 'uint64' },
-    ],
-    name: 'addBeneficiary',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    type: 'error',
+    inputs: [{ name: 'target', internalType: 'address', type: 'address' }],
+    name: 'AddressEmptyCode',
   },
-  {
-    type: 'function',
-    inputs: [
-      { name: '_vendorAddress', internalType: 'address', type: 'address' },
-      { name: 'tokenAddress', internalType: 'address', type: 'address' },
-    ],
-    name: 'addVendor',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
+  { type: 'error', inputs: [], name: 'FailedInnerCall' },
   {
     type: 'event',
     anonymous: false,
     inputs: [
       { name: 'tokenAddress', internalType: 'address', type: 'address', indexed: true },
       { name: 'benAddress', internalType: 'address', type: 'address', indexed: true },
+      { name: 'projectId', internalType: 'uint256', type: 'uint256', indexed: true },
       { name: 'amount', internalType: 'uint256', type: 'uint256', indexed: false },
     ],
     name: 'BeneficiaryAdded',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'name', internalType: 'string', type: 'string' },
-      { name: 'tokenName', internalType: 'string', type: 'string' },
-      { name: 'symbol', internalType: 'string', type: 'string' },
-    ],
-    name: 'createProject',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-    stateMutability: 'nonpayable',
   },
   {
     type: 'event',
@@ -58,7 +33,8 @@ export const projectAbi = [
     inputs: [
       { name: 'name', internalType: 'string', type: 'string', indexed: false },
       { name: 'symbol', internalType: 'string', type: 'string', indexed: false },
-      { name: 'tokenAddress', internalType: 'address', type: 'address', indexed: false },
+      { name: 'tokenAddress', internalType: 'address', type: 'address', indexed: true },
+      { name: 'projectId', internalType: 'uint256', type: 'uint256', indexed: true },
     ],
     name: 'ProjectCreated',
   },
@@ -80,6 +56,39 @@ export const projectAbi = [
       { name: 'project', internalType: 'uint256', type: 'uint256', indexed: true },
     ],
     name: 'VendorAdded',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'tokenAddress', internalType: 'address', type: 'address' },
+      { name: 'walletAddress', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint64', type: 'uint64' },
+    ],
+    name: 'addBeneficiary',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '_vendorAddress', internalType: 'address', type: 'address' },
+      { name: 'tokenAddress', internalType: 'address', type: 'address' },
+    ],
+    name: 'addVendor',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: 'tokenName', internalType: 'string', type: 'string' },
+      { name: 'symbol', internalType: 'string', type: 'string' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'createProject',
+    outputs: [{ name: 'tokenAddress', internalType: 'address', type: 'address' }],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -116,8 +125,14 @@ export const projectAbi = [
     outputs: [
       { name: '', internalType: 'string', type: 'string' },
       { name: '', internalType: 'string', type: 'string' },
-      { name: '', internalType: 'address', type: 'address' },
     ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenAddress', internalType: 'address', type: 'address' }],
+    name: 'getProjectBalance',
+    outputs: [{ name: 'balance', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
@@ -133,6 +148,13 @@ export const projectAbi = [
     name: 'getVendors',
     outputs: [{ name: 'vendor', internalType: 'address[]', type: 'address[]' }],
     stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'data', internalType: 'bytes[]', type: 'bytes[]' }],
+    name: 'multicall',
+    outputs: [{ name: 'results', internalType: 'bytes[]', type: 'bytes[]' }],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
@@ -179,6 +201,14 @@ export const useReadProjectGetBeneficiaries = /*#__PURE__*/ createUseReadContrac
 export const useReadProjectGetProject = /*#__PURE__*/ createUseReadContract({
   abi: projectAbi,
   functionName: 'getProject',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link projectAbi}__ and `functionName` set to `"getProjectBalance"`
+ */
+export const useReadProjectGetProjectBalance = /*#__PURE__*/ createUseReadContract({
+  abi: projectAbi,
+  functionName: 'getProjectBalance',
 })
 
 /**
@@ -235,6 +265,14 @@ export const useWriteProjectCreateProject = /*#__PURE__*/ createUseWriteContract
 })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link projectAbi}__ and `functionName` set to `"multicall"`
+ */
+export const useWriteProjectMulticall = /*#__PURE__*/ createUseWriteContract({
+  abi: projectAbi,
+  functionName: 'multicall',
+})
+
+/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link projectAbi}__
  */
 export const useSimulateProject = /*#__PURE__*/ createUseSimulateContract({ abi: projectAbi })
@@ -261,6 +299,14 @@ export const useSimulateProjectAddVendor = /*#__PURE__*/ createUseSimulateContra
 export const useSimulateProjectCreateProject = /*#__PURE__*/ createUseSimulateContract({
   abi: projectAbi,
   functionName: 'createProject',
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link projectAbi}__ and `functionName` set to `"multicall"`
+ */
+export const useSimulateProjectMulticall = /*#__PURE__*/ createUseSimulateContract({
+  abi: projectAbi,
+  functionName: 'multicall',
 })
 
 /**
