@@ -36,7 +36,7 @@ export const useAddProjectContract = () => {
       tokenQuantity: string;
     }) =>
       con.writeContractAsync({
-        args: [name, tokenName, tokenSymbol],
+        args: [name, tokenName, tokenSymbol, BigInt(tokenQuantity)],
         address: projectContract,
         __mode: 'prepared',
       }),
@@ -44,20 +44,20 @@ export const useAddProjectContract = () => {
     //   functionName: "createProject",
     //   args: [name, tokenName, tokenSymbol],
     // });
-    // onSuccess: (
-    //   tokenAddress,
-    //   { name, tokenName, tokenSymbol, description, imageUrl, rwaRepresentation, tokenQuantity }
-    // ) =>
-    //   api.post(endpoints.projects.add, {
-    //     name,
-    //     tokenName,
-    //     tokenSymbol,
-    //     description,
-    //     imageUrl,
-    //     rwaRepresentation,
-    //     tokenQuantity,
-    //     txHash: tokenAddress,
-    //   }),
+    onSuccess: (
+      tokenAddress,
+      { name, tokenName, tokenSymbol, description, imageUrl, rwaRepresentation, tokenQuantity }
+    ) =>
+      api.post(endpoints.projects.add, {
+        name,
+        tokenName,
+        tokenSymbol,
+        description,
+        imageUrl,
+        rwaRepresentation,
+        tokenQuantity,
+        txHash: tokenAddress,
+      }),
   });
 };
 
@@ -68,7 +68,7 @@ export const useListProject = () => {
 
   return useQuery({
     queryKey: ['projects-list'],
-    enabled: !!projectsGraph?.data?.projectCreateds.length,
+    // enabled: !!projectsGraph?.data?.projectCreateds.length,
     queryFn: async () => {
       const apiResponse = await api.get(endpoints.projects.list);
       const apiProjects = apiResponse.data;
@@ -78,6 +78,8 @@ export const useListProject = () => {
         const graphProject = projectsGraph?.data?.projectCreateds.find(
           (p) => p?.transactionHash === project?.txHash
         );
+
+        console.log('graphProject', graphProject, project);
 
         // Find the corresponding balance from projectBalances
         const projectBalance = projectsGraph?.data?.projectBalances.find(
@@ -338,7 +340,9 @@ export const useVendorTransactions = (walletAddress: `0x${string}`) => {
   });
 
   const combinedData = [...(vendor?.data?.vendorAddeds || []), ...(vendor?.data?.transfers || [])];
-  const transferTxn = [...(vendor?.data?.transfers || [])].sort((a, b) => +b.blockTimestamp - +a.blockTimestamp);
+  const transferTxn = [...(vendor?.data?.transfers || [])].sort(
+    (a, b) => +b.blockTimestamp - +a.blockTimestamp
+  );
   return {
     all: vendor,
     transactions: combinedData,
