@@ -168,7 +168,7 @@ export default function JobListView() {
         {canReset && renderResults}
       </Stack>
 
-      {!projects.isLoading && notFound && (
+      {projects.isFetched && notFound && (
         <EmptyContent
           filled
           title="No Project"
@@ -186,7 +186,7 @@ export default function JobListView() {
           }
         />
       )}
-      {projects.isLoading && <LoadingScreen title="Loading..." sx={{ py: 10 }} />}
+      {projects.isFetching && <LoadingScreen title="Loading..." sx={{ py: 10 }} />}
 
       <JobList jobs={dataFiltered} />
     </Container>
