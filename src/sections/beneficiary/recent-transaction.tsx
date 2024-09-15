@@ -61,7 +61,7 @@ export default function BeneficiaryTransaction({
           size="small"
           color="inherit"
           endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={18} sx={{ ml: -0.5 }} />}
-          href={`/projects/${uuid}/transactions`}
+          href={`/projects/${uuid}/transaction`}
         >
           View All Transactions
         </Button>
