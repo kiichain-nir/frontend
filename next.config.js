@@ -1,4 +1,5 @@
 module.exports = {
+  output: 'standalone',
   trailingSlash: true,
   typescript: {
     ignoreBuildErrors: true,
