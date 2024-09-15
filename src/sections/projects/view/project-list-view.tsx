@@ -2,6 +2,7 @@
 
 import orderBy from 'lodash/orderBy';
 import isEqual from 'lodash/isEqual';
+import { useRouter } from 'next/navigation';
 import { useState, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
@@ -18,6 +19,7 @@ import { useListProject } from 'src/services/projects';
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
+import { LoadingScreen } from 'src/components/loading-screen';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import { IJobItem, IJobFilters, IJobFilterValue } from 'src/types/job';
@@ -25,8 +27,6 @@ import { IJobItem, IJobFilters, IJobFilterValue } from 'src/types/job';
 import JobList from '../job-list';
 import JobSearch from '../job-search';
 import JobFiltersResult from '../job-filters-result';
-import { useRouter } from 'next/navigation';
-import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -168,7 +168,7 @@ export default function JobListView() {
         {canReset && renderResults}
       </Stack>
 
-      {notFound && (
+      {!projects.isLoading && notFound && (
         <EmptyContent
           filled
           title="No Project"

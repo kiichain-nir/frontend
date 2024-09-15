@@ -68,7 +68,7 @@ export const useListProject = () => {
 
   return useQuery({
     queryKey: ['projects-list'],
-    // enabled: !!projectsGraph?.data?.projectCreateds.length,
+    enabled: !!projectsGraph?.data?.projectCreateds.length,
     queryFn: async () => {
       const apiResponse = await api.get(endpoints.projects.list);
       const apiProjects = apiResponse.data;
