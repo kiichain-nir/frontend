@@ -242,9 +242,12 @@ export const useCreateProjectVendor = () => {
   const contract = useWriteProjectAddVendor();
 
   return useMutation({
+    onMutate(variables) {
+      console.log('variables', variables);
+    },
     onError(error, variables, context) {
       console.error(error);
-      enqueueSnackbar('Error adding vendor', { variant: 'error' });
+      enqueueSnackbar('Error adding community manager', { variant: 'error' });
     },
     async onSuccess(data, { tokenAddress, ...variables }, context) {
       return api
