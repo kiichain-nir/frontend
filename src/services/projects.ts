@@ -250,14 +250,9 @@ export const useCreateProjectVendor = () => {
       enqueueSnackbar('Error adding community manager', { variant: 'error' });
     },
     async onSuccess(data, { tokenAddress, ...variables }, context) {
-      return api
-        .post(endpoints.vendors.add, {
-          ...variables,
-          extras: JSON.stringify(variables.extras),
-        })
-        .then(() => {
-          enqueueSnackbar('Community Manager added successfully', { variant: 'success' });
-        });
+      return api.post(endpoints.vendors.add, variables).then(() => {
+        enqueueSnackbar('Community Manager added successfully', { variant: 'success' });
+      });
     },
     mutationFn: async (data: {
       projectUUID: UUID;
