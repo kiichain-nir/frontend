@@ -42,7 +42,7 @@ jobs:
           context: .
           cache-from: type=gha,scope=${{ github.ref_name }}-kiichain-fe
           cache-to: type=gha,mode=max,scope=${{ github.ref_name }}-kiichain-fe
-          file: Dockerfile
+          file: Dockerfile.standalone
           push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
           tags: | 
             thespiritman/kiichain-frontend:${{ github.sha }}
