@@ -79,7 +79,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
       await createProject.mutateAsync(data);
       reset();
       enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
-      // router.push(paths.projects.root);
+      router.push(paths.projects.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
